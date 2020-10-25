@@ -1,32 +1,34 @@
 package NonInteractiveClient;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.Socket;
+import java.nio.ByteBuffer;
+import java.nio.channels.SocketChannel;
 
 public class BotClientReceive implements Runnable {
-    Socket socket;
+    private SocketChannel socket;
+    private MessagesQueue queue;
 
-    public BotClientReceive(Socket socket) {
+    public BotClientReceive(SocketChannel socket, MessagesQueue queue) {
         this.socket = socket;
+        this.queue = queue;
     }
 
+    @Override
     public void run() {
-        try {
-            /* In reads from socket input steam */
-            BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+        ByteBuffer buf = ByteBuffer.allocate(100);
 
-            /* Each time a message from server is received, print it */
-            while(true) {
-                try {
-                    System.out.println(in.readLine());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        /* Listen for messages */
+        while(true) {
+            try {
+                this.socket.read(buf);
+
+                buf.flip();
+                this.queue.add(new String(buf.array()));
+
+                buf.clear();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }

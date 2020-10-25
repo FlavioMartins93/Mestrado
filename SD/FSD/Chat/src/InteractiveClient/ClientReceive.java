@@ -4,29 +4,31 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.nio.ByteBuffer;
+import java.nio.channels.SocketChannel;
 
 public class ClientReceive implements Runnable {
-    Socket socket;
+    private SocketChannel socket;
 
-    public ClientReceive(Socket socket) {
+    public ClientReceive(SocketChannel socket) {
         this.socket = socket;
     }
 
+    @Override
     public void run() {
-        try {
-            /* In reads from socket input steam */
-            BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+        ByteBuffer buf = ByteBuffer.allocate(100);
 
-            /* Each time a message from server is received, print it */
-            while(true) {
-                try {
-                    System.out.println(in.readLine());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        /* Listen for messages */
+        while(true) {
+            try {
+                this.socket.read(buf);
+
+                buf.flip();
+                System.out.print(new String(buf.array()));
+                buf.clear();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }
