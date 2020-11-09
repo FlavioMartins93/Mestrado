@@ -32,25 +32,21 @@ public class Server {
         readLineRec(sc);
     }
 
-    public static void readLineRec(CompletableFuture<FutureSocketChannel> sc) {
+    public static void readLineRec(CompletableFuture<FutureSocketChannel> sc){
         sc.thenAccept(s -> {
             ByteBuffer buf = ByteBuffer.allocate(1000);
 
             CompletableFuture<Integer> read = s.read(buf);
 
-            read.thenAccept(i -> {
-                System.out.println(buf);
-                //s.write(buf);
-                for (CompletableFuture<FutureSocketChannel> sAux : conList) {
-                    sAux.thenAccept(r ->{
-                        buf.flip();
-                        r.write(buf);
-                    });
-                }
+            read.thenAccept(i->{
+                conList.forEach(s1 -> s1.thenAccept(s2 -> {
+                    buf.flip();
+                    s2.write(buf);
+                }));
                 readLineRec(sc);
             });
         }).thenCompose(r -> {
-            readLine();
+            readLine(ssc);
             return null;
         });
     }
