@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/atomix.iml" filepath="$PROJECT_DIR$/atomix.iml" />
+      <module fileurl="file://$PROJECT_DIR$/leaderElection.iml" filepath="$PROJECT_DIR$/leaderElection.iml" />
     </modules>
   </component>
 </project>
