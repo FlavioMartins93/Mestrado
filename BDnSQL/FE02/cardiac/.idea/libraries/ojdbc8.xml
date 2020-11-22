@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="ojdbc8">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/ojdbc8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/json-simple-1.1.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
