@@ -15,9 +15,7 @@ public class Broadcast {
 
     public int getSize() {
         synchronized (lock) {
-            int i = 0;
-            for(Client c : this.clients) i++;
-            return i;
+            return this.clients.size();
         }
     }
 
