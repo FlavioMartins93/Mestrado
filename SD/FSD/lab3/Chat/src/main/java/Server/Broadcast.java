@@ -15,7 +15,9 @@ public class Broadcast {
 
     public int getSize() {
         synchronized (lock) {
-            return this.clients.size();
+            int i = 0;
+            for(Client c : this.clients) i++;
+            return i;
         }
     }
 
@@ -28,7 +30,7 @@ public class Broadcast {
     public void removeClient(Client c) {
         synchronized (lock) {
             this.clients.remove(c);
-            System.out.println("Some client left");
+            System.out.println("1 client left");
         }
     }
 
@@ -39,7 +41,6 @@ public class Broadcast {
                     c.putMessage(buff.duplicate());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                    this.clients.remove(c);
                 }
             }
         }

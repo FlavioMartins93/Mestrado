@@ -42,6 +42,9 @@ public class Client {
             buff.flip();
             this.broadcast.broadcast(buff);
             recRead();
+        }).exceptionally(t -> {
+            this.broadcast.removeClient(this);
+            return null;
         });
     }
 }
