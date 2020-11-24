@@ -1,6 +1,7 @@
 package Server;
 
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,15 +34,16 @@ public class Broadcast {
     }
 
     public void broadcast(ByteBuffer buff) {
+        String msg = StandardCharsets.UTF_8.decode(buff).toString();
+        buff.clear();
         synchronized (lock) {
             for(Client c : this.clients) {
                 try {
-                    c.putMessage(buff.duplicate());
+                    c.putMessage(msg);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
         }
-        buff.clear();
     }
 }

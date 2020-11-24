@@ -19,7 +19,7 @@ public class Client {
     }
 
     public void recWrite() throws InterruptedException {
-        ByteBuffer buff = (ByteBuffer) this.messages.take();
+        ByteBuffer buff = ByteBuffer.wrap(((String) this.messages.take()).getBytes());
         this.s.write(buff).thenAccept(m -> {
             try {
                 recWrite();
@@ -30,15 +30,14 @@ public class Client {
         buff.clear();
     }
 
-    public void putMessage(ByteBuffer buff) throws InterruptedException {
-        this.messages.put(buff);
+    public void putMessage(String message ) throws InterruptedException {
+        this.messages.put(message);
     }
 
     public void recRead() {
-        ByteBuffer buff = ByteBuffer.allocate(1000);
+        ByteBuffer buff = ByteBuffer.allocate(100);
 
         this.s.read(buff).thenAccept( message -> {
-            if( message == null) this.broadcast.removeClient(this);
             buff.flip();
             this.broadcast.broadcast(buff);
             recRead();
