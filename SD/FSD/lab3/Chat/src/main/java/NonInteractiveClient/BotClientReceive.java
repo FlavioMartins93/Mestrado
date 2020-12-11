@@ -23,11 +23,11 @@ public class BotClientReceive implements Runnable {
             try {
                 Thread.sleep(this.sleepTime);
 
-                this.socket.read(buf);
+                //this.socket.read(buf);
 
                 buf.flip();
-                String msg = StandardCharsets.UTF_8.decode(buf).toString();
-                System.out.print("After sleeping: "+ this.sleepTime + " | Received: " + msg);
+                String msg = ReadLine.readLine(this.socket);
+                if(msg != null) System.out.print("After sleeping: "+ this.sleepTime + " | Received: " + msg);
                 buf.clear();
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
